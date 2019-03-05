@@ -3,19 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using EventDispatcher;
 using System;
+using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance = new UIManager();
+    public Text txtNumberGrass;
+    public GameObject panelEndGame;
+    public Text txtWinOver;
+    void Awake()
+    {
+        if (Instance != null)
+        {
+            return;
+        }
+        Instance = this;
+    }
+
     // Use this for initialization
     void Start()
     {
-
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        txtNumberGrass.text = GameManager.Instance.numGrass.ToString();
     }
 
     #region === SUPPORT ===
@@ -74,7 +86,42 @@ public class UIManager : MonoBehaviour
             {
                 this.PostEvent(EventID.START_GAME);
                 GameManager.Instance.stateGame = StateGame.PLAYING;
+                StartCoroutine(GameManager.Instance.SpawnCutter());  
             });
+    }
+
+    public void Btn_RePlay()
+    {
+        Time.timeScale = 1;
+        panelEndGame.transform.localScale = new Vector3(0, 0, 0);
+        ScenesManager.Instance.GoToScene(ScenesManager.TypeScene.Main, () =>
+        {
+            this.PostEvent(EventID.START_GAME);
+            GameManager.Instance.stateGame = StateGame.PLAYING;
+            for (int i = 0; i < GameManager.Instance.lstBoom.Count; i++)
+            {
+                GameManager.Instance.lstBoom[i].Refresh();
+            }
+            GameManager.Instance.Generate();
+            GameManager.Instance.boxCenter.SetActive(true);
+            GameManager.Instance.cutter.transform.localScale = new Vector3(0.3f, 0.3f, 1);
+            GameManager.Instance.cutter.transform.position = Vector3.zero;
+            StartCoroutine(GameManager.Instance.SpawnCutter());
+            
+            
+        });
+    }
+
+    public void ShowPanelEndGame(string _state)
+    {
+        panelEndGame.transform.localScale = new Vector3(1, 1, 1);
+        txtWinOver.text = _state;
+        Time.timeScale = 0;
+    }
+
+    public void ABC()
+    {
+        ShowPanelEndGame("Win");
     }
     #endregion
 }

@@ -3,7 +3,10 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Cutter
+  - Grass
+  - Boom
   layers:
   - Default
   - TransparentFX
@@ -40,4 +43,13 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Grass
+    uniqueID: 3054715725
+    locked: 0
+  - name: Cutter
+    uniqueID: 3071534023
+    locked: 0
+  - name: Home
+    uniqueID: 1876763889
     locked: 0

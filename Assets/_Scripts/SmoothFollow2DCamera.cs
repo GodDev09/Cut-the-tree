@@ -26,7 +26,7 @@ public class SmoothFollow2DCamera : MonoBehaviour
         //{
             Vector3 position = target.position + offset;
             Vector3 smoothedPosition = Vector3.Lerp(transform.position, position, smoothSpeed);
-            transform.position = smoothedPosition;
+            transform.position = new Vector3(Mathf.Clamp(smoothedPosition.x, -3.3f, 3.3f), Mathf.Clamp(smoothedPosition.y, -7.5f, 4f), smoothedPosition.z);
             //transform.LookAt(target);
         //}
     }

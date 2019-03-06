@@ -7,8 +7,8 @@ public class MoveController : MonoBehaviour
     private Vector3 mousePosition;
     private Rigidbody2D rb;
     private Vector2 direction;
-    private float moveSpeed = 15f;
-    float speed;
+    public float maxSpeed;
+    float speed = 0;
     public GameObject dirObj;
     public GameObject fire;
     // Use this for initialization
@@ -23,18 +23,19 @@ public class MoveController : MonoBehaviour
     {
         if (Input.GetMouseButton(0))
         {
-            mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            //mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mousePosition = Camera.main.ScreenToViewportPoint(Input.mousePosition);
             if (startPosition == Vector3.zero)
             {
                 startPosition = mousePosition;
             }
-            direction = (mousePosition - transform.position).normalized;
             float rot_z = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0f, 0f, rot_z - 90);
-            lastPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            speed += Time.deltaTime * moveSpeed;
-            if (speed >= moveSpeed)
-                speed = moveSpeed;
+            lastPosition = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+            direction = (lastPosition - startPosition).normalized;
+            speed += Time.deltaTime * maxSpeed/3;
+            if (speed >= maxSpeed)
+                speed = maxSpeed;
             if ((lastPosition - startPosition).normalized != Vector3.zero)//Vector3.Distance(startPosition, lastPosition) >= 1.5f)
             {
                 dirObj.transform.position = new Vector3(dirObj.transform.position.x, dirObj.transform.position.y, 0);
@@ -42,7 +43,6 @@ public class MoveController : MonoBehaviour
                 //dirObj.transform.rotation = Quaternion.Euler(0f, 0f, rot_z - 90);
                 //fire.SetActive(true);
             }
-
         }
         else
         {
@@ -59,6 +59,7 @@ public class MoveController : MonoBehaviour
         {
             float a = (((1f / 3f - 1f / 20f) * (GameManager.Instance.maxGrass - GameManager.Instance.numGrass) / GameManager.Instance.maxGrass) + 1f / 20f) * Screen.width * 0.00001f;
             transform.localScale += new Vector3(a, a, 0);
+            AudioManager.Instance.PlaySaw();
         }
         else if (other.tag == "Boom")
         {
@@ -66,5 +67,12 @@ public class MoveController : MonoBehaviour
             //GameManager.Instance.GameOver();
             UIManager.Instance.ShowPanelEndGame("Game Over");
         }
+        //else if (other.tag == "Map")
+        //{
+        //    speed = 0;
+        //    startPosition = lastPosition = Vector3.zero;
+        //    rb.velocity = Vector2.zero;
+        //    dirObj.transform.position = new Vector3(dirObj.transform.position.x, dirObj.transform.position.y, -100);
+        //}
     }
 }

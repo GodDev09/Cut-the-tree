@@ -13,7 +13,7 @@ public class Boom : MonoBehaviour
     void OnSpawned()
     {
         GameManager.Instance.lstBoom.Add(this);
-        speed = Random.Range(1.5f, 3);
+        speed = Random.Range(1.5f, GameConfig.Instance.MaxSpeedBoom);
         NextPoint();
     }
 
@@ -46,9 +46,7 @@ public class Boom : MonoBehaviour
 
     void NextPoint()
     {
-        float a = Random.Range(-maxX, maxX);
-        float b = Random.Range(-maxY, maxY);
-        target = new Vector3(a, b, 0);
+        target = new Vector3(Random.Range(-maxX, maxX), Random.Range(-maxY, maxY), 0);
     }
 
     public void Refresh()

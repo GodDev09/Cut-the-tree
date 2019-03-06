@@ -7,6 +7,7 @@ TagManager:
   - Cutter
   - Grass
   - Boom
+  - Map
   layers:
   - Default
   - TransparentFX

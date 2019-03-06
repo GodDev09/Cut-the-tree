@@ -6,7 +6,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance = new GameManager();
     public StateGame stateGame = StateGame.NONE;
-    public int maxGrass = 300;
+    public int maxGrass;
+    public int minGrass;
     public int numGrass;
     public Transform preGrass;
     public GameObject boxCenter;
@@ -42,56 +43,71 @@ public class GameManager : MonoBehaviour
     public void Generate()
     {
         lstBoom.Clear();
-        maxGrass = Random.Range(300, 500);
+        maxGrass = Random.Range(minGrass, maxGrass);
         Debug.Log(maxGrass);
-        for (int i = 0; i < maxGrass/4; i++)
+
+        for (int i = 0; i < maxGrass / lstPosSpawn.Length; i++)
         {
             if (numGrass < maxGrass)
             {
-                float a = Random.Range(-1, 1f);
-                float b = Random.Range(-1, 1f);
-                EZ_Pooling.EZ_PoolManager.Spawn(preGrass, lstPosSpawn[0].position + new Vector3(a, b, 0), Quaternion.identity);
-                numGrass++;
+                for (int j = 0; j < lstPosSpawn.Length; j++)
+                {
+                    EZ_Pooling.EZ_PoolManager.Spawn(preGrass, lstPosSpawn[j].position + new Vector3(Random.Range(-1, 1f), Random.Range(-1, 1f), 0), Quaternion.identity);
+                    numGrass++;
+                }
             }
             else
                 break;
         }
-        for (int i = 0; i < maxGrass / 4; i++)
-        {
-            if (numGrass < maxGrass)
-            {
-                float a = Random.Range(-1, 1f);
-                float b = Random.Range(-1, 1f);
-                EZ_Pooling.EZ_PoolManager.Spawn(preGrass, lstPosSpawn[1].position + new Vector3(a, b, 0), Quaternion.identity);
-                numGrass++;
-            }
-            else
-                break;
-        }
-        for (int i = 0; i < maxGrass / 4; i++)
-        {
-            if (numGrass < maxGrass)
-            {
-                float a = Random.Range(-1, 1f);
-                float b = Random.Range(-1, 1f);
-                EZ_Pooling.EZ_PoolManager.Spawn(preGrass, lstPosSpawn[2].position + new Vector3(a, b, 0), Quaternion.identity);
-                numGrass++;
-            }
-            else
-                break;
-        }
-        for (int i = 0; i < maxGrass / 4; i++)
-        {
-            if (numGrass < maxGrass)
-            {
-                float a = Random.Range(-1, 1f);
-                float b = Random.Range(-1, 1f);
-                EZ_Pooling.EZ_PoolManager.Spawn(preGrass, lstPosSpawn[3].position + new Vector3(a, b, 0), Quaternion.identity);
-                numGrass++;
-            }
-            else
-                break;
-        }
+
+        //for (int i = 0; i < maxGrass / 4; i++)
+        //{
+        //    if (numGrass < maxGrass)
+        //    {
+        //        float a = Random.Range(-1, 1f);
+        //        float b = Random.Range(-1, 1f);
+        //        EZ_Pooling.EZ_PoolManager.Spawn(preGrass, lstPosSpawn[0].position + new Vector3(a, b, 0), Quaternion.identity);
+        //        numGrass++;
+        //    }
+        //    else
+        //        break;
+        //}
+        //for (int i = 0; i < maxGrass / 4; i++)
+        //{
+        //    if (numGrass < maxGrass)
+        //    {
+        //        float a = Random.Range(-1, 1f);
+        //        float b = Random.Range(-1, 1f);
+        //        EZ_Pooling.EZ_PoolManager.Spawn(preGrass, lstPosSpawn[1].position + new Vector3(a, b, 0), Quaternion.identity);
+        //        numGrass++;
+        //    }
+        //    else
+        //        break;
+        //}
+        //for (int i = 0; i < maxGrass / 4; i++)
+        //{
+        //    if (numGrass < maxGrass)
+        //    {
+        //        float a = Random.Range(-1, 1f);
+        //        float b = Random.Range(-1, 1f);
+        //        EZ_Pooling.EZ_PoolManager.Spawn(preGrass, lstPosSpawn[2].position + new Vector3(a, b, 0), Quaternion.identity);
+        //        numGrass++;
+        //    }
+        //    else
+        //        break;
+        //}
+        //for (int i = 0; i < maxGrass / 4; i++)
+        //{
+        //    if (numGrass < maxGrass)
+        //    {
+        //        float a = Random.Range(-1, 1f);
+        //        float b = Random.Range(-1, 1f);
+        //        EZ_Pooling.EZ_PoolManager.Spawn(preGrass, lstPosSpawn[3].position + new Vector3(a, b, 0), Quaternion.identity);
+        //        numGrass++;
+        //    }
+        //    else
+        //        break;
+        //}
         //StartCoroutine(SpawnCutter());
     }
 
@@ -99,7 +115,7 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
         boxCenter.SetActive(false);
-        cutter.SetActive(true);        
+        cutter.SetActive(true);
         for (int i = 0; i < Random.Range(2, 5); i++)
         {
             Vector3 pos;
@@ -112,7 +128,7 @@ public class GameManager : MonoBehaviour
                 pos = lstPosSpawn[i].position;
             }
             yield return new WaitForSeconds(1f);
-            EZ_Pooling.EZ_PoolManager.Spawn(preBoom, pos, Quaternion.identity);           
+            EZ_Pooling.EZ_PoolManager.Spawn(preBoom, pos, Quaternion.identity);
         }
     }
 

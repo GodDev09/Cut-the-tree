@@ -1,0 +1,23 @@
+{
+  "GoldStart" : 120,
+  "CoinStart" : 10,
+  "MaxSpeedCutter" : 2,
+  "MaxSpeedBoom" : 3,
+  "MinGrass" : 200,
+  "MaxGrass" : 400,
+  "ID_UnityAds_ios" : "",
+  "ID_Inter_android" : "",
+  "ID_Inter_ios" : "",
+  "ID_Banner_ios" : "",
+  "kProductID50" : "consumable",
+  "kProductID300" : "consumable",
+  "kProductID5000": "consumable",
+  "link_ios" : "",
+  "link_android" : "",
+  "string_Share" : "",
+  "introduction": {
+  "warning1" : "abc",
+  "warning2" : "abc",
+  "warning3" : "abc"
+  }
+}

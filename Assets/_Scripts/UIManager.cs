@@ -86,7 +86,8 @@ public class UIManager : MonoBehaviour
             {
                 this.PostEvent(EventID.START_GAME);
                 GameManager.Instance.stateGame = StateGame.PLAYING;
-                StartCoroutine(GameManager.Instance.SpawnCutter());  
+                StartCoroutine(GameManager.Instance.SpawnCutter());
+                AudioManager.Instance.Play("GamePlay", true);
             });
     }
 
@@ -107,7 +108,7 @@ public class UIManager : MonoBehaviour
             GameManager.Instance.cutter.transform.localScale = new Vector3(0.3f, 0.3f, 1);
             GameManager.Instance.cutter.transform.position = Vector3.zero;
             StartCoroutine(GameManager.Instance.SpawnCutter());
-            
+            AudioManager.Instance.Play("Click");
             
         });
     }

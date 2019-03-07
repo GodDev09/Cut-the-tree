@@ -19,7 +19,7 @@ public class MoveController : MonoBehaviour
 
     Vector3 startPosition;
     Vector3 lastPosition;
-    void Update()
+    void FixedUpdate()
     {
         if (Input.GetMouseButton(0))
         {
@@ -33,7 +33,7 @@ public class MoveController : MonoBehaviour
             transform.rotation = Quaternion.Euler(0f, 0f, rot_z - 90);
             lastPosition = Camera.main.ScreenToViewportPoint(Input.mousePosition);
             direction = (lastPosition - startPosition).normalized;
-            speed += Time.deltaTime * maxSpeed/3;
+            speed += Time.deltaTime * maxSpeed / 2;
             if (speed >= maxSpeed)
                 speed = maxSpeed;
             if ((lastPosition - startPosition).normalized != Vector3.zero)//Vector3.Distance(startPosition, lastPosition) >= 1.5f)

@@ -20,7 +20,7 @@ public class SmoothFollow2DCamera : MonoBehaviour
     }
 
     // Update is called once per frame
-    void LateUpdate()
+    void FixedUpdate()
     {
         //if (transform.position.x < 3.3f && transform.position.x > -3.3f && transform.position.y < 4 && transform.position.y > -7.5f)
         //{

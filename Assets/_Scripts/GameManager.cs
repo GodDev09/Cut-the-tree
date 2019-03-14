@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EventDispatcher;
 
 public class GameManager : MonoBehaviour
 {
@@ -27,7 +28,8 @@ public class GameManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Generate();
+        this.RegisterListener(EventID.START_GAME, (param) => ON_START_GAME());
+        
     }
 
     // Update is called once per frame
@@ -40,11 +42,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void ON_START_GAME()
+    {
+        Generate();
+    }
+
     public void Generate()
     {
         lstBoom.Clear();
         maxGrass = Random.Range(minGrass, maxGrass);
-        Debug.Log(maxGrass);
 
         for (int i = 0; i < maxGrass / lstPosSpawn.Length; i++)
         {

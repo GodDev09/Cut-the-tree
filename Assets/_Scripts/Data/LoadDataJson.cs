@@ -67,7 +67,7 @@ public class LoadDataJson : MonoBehaviour
             //}
             GameManager.Instance.minGrass = GameConfig.Instance.MinGrass;
             GameManager.Instance.maxGrass = GameConfig.Instance.MaxGrass;
-            GameManager.Instance.cutter.GetComponent<MoveController>().maxSpeed = GameConfig.Instance.MaxSpeedCutter;
+            GameManager.Instance.parent.GetComponent<MoveController>().maxSpeed = GameConfig.Instance.MaxSpeedCutter;
         }
         gameManager.SetActive(true);
     }

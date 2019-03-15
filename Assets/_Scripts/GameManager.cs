@@ -11,12 +11,15 @@ public class GameManager : MonoBehaviour
     public int minGrass;
     public int numGrass;
     public Transform preGrass;
-    public GameObject boxCenter;
-    public GameObject cutter;
+    public GameObject parent;
     public Transform preBoom;
+    public GameObject preCutter;
     public Transform[] lstPosSpawn;
     public List<Boom> lstBoom = new List<Boom>();
     public List<Grass> lstGrass = new List<Grass>();
+    public List<MoveController> lstCutter = new List<MoveController>();
+    public int a = 1;
+    public int spawnCutter;
     void Awake()
     {
         if (Instance != null)
@@ -29,7 +32,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         this.RegisterListener(EventID.START_GAME, (param) => ON_START_GAME());
-        
+        //Instantiate(preCutter, parent.transform.position, Quaternion.identity, parent.transform);
     }
 
     // Update is called once per frame
@@ -39,11 +42,17 @@ public class GameManager : MonoBehaviour
         {
             if (numGrass <= 0)
                 Win();
+
+            if (lstCutter.Count <= 0)
+                GameOver();
+
+            SpawnCutter_EatGrass();
         }
     }
 
     void ON_START_GAME()
     {
+        stateGame = StateGame.PLAYING;
         Generate();
     }
 
@@ -120,8 +129,13 @@ public class GameManager : MonoBehaviour
     public IEnumerator SpawnCutter()
     {
         yield return new WaitForSeconds(3f);
-        boxCenter.SetActive(false);
-        cutter.SetActive(true);
+        parent.SetActive(true);
+
+        //StartCoroutine(SpawnBoom());
+    }
+
+    IEnumerator SpawnBoom()
+    {
         for (int i = 0; i < Random.Range(2, 5); i++)
         {
             Vector3 pos;
@@ -135,6 +149,18 @@ public class GameManager : MonoBehaviour
             }
             yield return new WaitForSeconds(1f);
             EZ_Pooling.EZ_PoolManager.Spawn(preBoom, pos, Quaternion.identity);
+        }
+    }
+
+    void SpawnCutter_EatGrass()
+    {
+        if (spawnCutter >= 20)
+        {
+            spawnCutter = 0;
+            lstCutter[a].gameObject.SetActive(true);
+            a++;
+            //Instantiate(preCutter, parent.transform.position, Quaternion.identity,parent.transform);
+            //EZ_Pooling.EZ_PoolManager.Spawn(preCutter, parent.transform.position, Quaternion.identity);
         }
     }
 

@@ -85,7 +85,6 @@ public class UIManager : MonoBehaviour
         ScenesManager.Instance.GoToScene(ScenesManager.TypeScene.Main, () =>
             {
                 this.PostEvent(EventID.START_GAME);
-                GameManager.Instance.stateGame = StateGame.PLAYING;
                 StartCoroutine(GameManager.Instance.SpawnCutter());
                 AudioManager.Instance.Play("GamePlay", true);
             });
@@ -98,15 +97,13 @@ public class UIManager : MonoBehaviour
         ScenesManager.Instance.GoToScene(ScenesManager.TypeScene.Main, () =>
         {
             this.PostEvent(EventID.START_GAME);
-            GameManager.Instance.stateGame = StateGame.PLAYING;
             for (int i = 0; i < GameManager.Instance.lstBoom.Count; i++)
             {
                 GameManager.Instance.lstBoom[i].Refresh();
             }
             GameManager.Instance.Generate();
-            GameManager.Instance.boxCenter.SetActive(true);
-            GameManager.Instance.cutter.transform.localScale = new Vector3(0.3f, 0.3f, 1);
-            GameManager.Instance.cutter.transform.position = Vector3.zero;
+            GameManager.Instance.parent.transform.localScale = new Vector3(0.3f, 0.3f, 1);
+            GameManager.Instance.parent.transform.position = Vector3.zero;
             StartCoroutine(GameManager.Instance.SpawnCutter());
             AudioManager.Instance.Play("Click");
             

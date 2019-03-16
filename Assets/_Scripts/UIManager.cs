@@ -92,20 +92,27 @@ public class UIManager : MonoBehaviour
 
     public void Btn_RePlay()
     {
+        AudioManager.Instance.Play("Click");
         Time.timeScale = 1;
         panelEndGame.transform.localScale = new Vector3(0, 0, 0);
+        
         ScenesManager.Instance.GoToScene(ScenesManager.TypeScene.Main, () =>
         {
-            this.PostEvent(EventID.START_GAME);
             for (int i = 0; i < GameManager.Instance.lstBoom.Count; i++)
             {
                 GameManager.Instance.lstBoom[i].Refresh();
             }
-            GameManager.Instance.Generate();
-            GameManager.Instance.parent.transform.localScale = new Vector3(0.3f, 0.3f, 1);
             GameManager.Instance.parent.transform.position = Vector3.zero;
+            GameManager.Instance.lstCutter[0].transform.position = Vector3.zero;
+            for (int i = 1; i < GameManager.Instance.lstCutter.Count; i++)
+            {
+                GameManager.Instance.lstCutter[i].DeActive();
+            }
+            GameManager.Instance.health = 0;
+            StartCoroutine(GameManager.Instance.DeSpawnGrass());
+            StartCoroutine(GameManager.Instance.Generate());
             StartCoroutine(GameManager.Instance.SpawnCutter());
-            AudioManager.Instance.Play("Click");
+            this.PostEvent(EventID.START_GAME);
             
         });
     }

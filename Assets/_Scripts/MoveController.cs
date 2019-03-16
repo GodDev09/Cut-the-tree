@@ -10,6 +10,7 @@ public class MoveController : MonoBehaviour
     public float maxSpeed;
     float speed = 0;
     public GameObject dirObj;
+    public bool isActive = false;
     //public GameObject fire;
     // Use this for initialization
     void Start()
@@ -41,7 +42,7 @@ public class MoveController : MonoBehaviour
                 speed = maxSpeed;
             if ((lastPosition - startPosition).normalized != Vector3.zero)//Vector3.Distance(startPosition, lastPosition) >= 1.5f)
             {
-                if (dirObj != null)
+                if (dirObj != null && dirObj.activeSelf)
                 {
                     dirObj.transform.position = new Vector3(dirObj.transform.position.x, dirObj.transform.position.y, 0);
                     dirObj.transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
@@ -55,7 +56,7 @@ public class MoveController : MonoBehaviour
             speed = 0;
             startPosition = lastPosition = Vector3.zero;
             rb.velocity = Vector2.zero;
-            if (dirObj != null)
+            if (dirObj != null && dirObj.activeSelf)
             {
                 dirObj.transform.position = new Vector3(dirObj.transform.position.x, dirObj.transform.position.y, -100);
             }
@@ -79,10 +80,31 @@ public class MoveController : MonoBehaviour
         else if (other.tag == "Boom")
         {
             Debug.Log("Over");
-            GameManager.Instance.lstCutter.Remove(this);
-            Destroy(this);
+            //GameManager.Instance.lstCutter.Remove(this);
+            DeActive();
             //GameManager.Instance.GameOver();
             //UIManager.Instance.ShowPanelEndGame("Game Over");
         }
+    }
+
+    public void Active()
+    {
+        isActive = true;
+        GameManager.Instance.health++;
+        this.GetComponent<SpriteRenderer>().enabled = true;
+        this.GetComponent<CircleCollider2D>().enabled = true;
+        this.transform.position = new Vector3(this.transform.position.x + 0.01f, this.transform.position.y, this.transform.position.z);
+        dirObj.SetActive(true);
+    }
+
+    public void DeActive()
+    {
+        isActive = false;
+        GameManager.Instance.health--;
+        this.transform.position = Vector3.zero;
+        this.GetComponent<SpriteRenderer>().enabled = false;
+        this.GetComponent<CircleCollider2D>().enabled = false;
+        dirObj.SetActive(false);
+        GameManager.Instance.GameOver();
     }
 }

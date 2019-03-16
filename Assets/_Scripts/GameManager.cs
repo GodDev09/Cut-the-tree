@@ -18,8 +18,8 @@ public class GameManager : MonoBehaviour
     public List<Boom> lstBoom = new List<Boom>();
     public List<Grass> lstGrass = new List<Grass>();
     public List<MoveController> lstCutter = new List<MoveController>();
-    public int a = 1;
     public int spawnCutter;
+    public int health = 0;
     void Awake()
     {
         if (Instance != null)
@@ -43,8 +43,8 @@ public class GameManager : MonoBehaviour
             if (numGrass <= 0)
                 Win();
 
-            if (lstCutter.Count <= 0)
-                GameOver();
+            //if (health <= 0)
+            //    GameOver();
 
             SpawnCutter_EatGrass();
         }
@@ -53,14 +53,15 @@ public class GameManager : MonoBehaviour
     void ON_START_GAME()
     {
         stateGame = StateGame.PLAYING;
-        Generate();
+        StartCoroutine(Generate());
     }
 
-    public void Generate()
+    public IEnumerator Generate()
     {
         lstBoom.Clear();
         maxGrass = Random.Range(minGrass, maxGrass);
 
+        yield return new WaitForEndOfFrame();
         for (int i = 0; i < maxGrass / lstPosSpawn.Length; i++)
         {
             if (numGrass < maxGrass)
@@ -73,57 +74,16 @@ public class GameManager : MonoBehaviour
             }
             else
                 break;
-        }
+        }        
+    }
 
-        //for (int i = 0; i < maxGrass / 4; i++)
-        //{
-        //    if (numGrass < maxGrass)
-        //    {
-        //        float a = Random.Range(-1, 1f);
-        //        float b = Random.Range(-1, 1f);
-        //        EZ_Pooling.EZ_PoolManager.Spawn(preGrass, lstPosSpawn[0].position + new Vector3(a, b, 0), Quaternion.identity);
-        //        numGrass++;
-        //    }
-        //    else
-        //        break;
-        //}
-        //for (int i = 0; i < maxGrass / 4; i++)
-        //{
-        //    if (numGrass < maxGrass)
-        //    {
-        //        float a = Random.Range(-1, 1f);
-        //        float b = Random.Range(-1, 1f);
-        //        EZ_Pooling.EZ_PoolManager.Spawn(preGrass, lstPosSpawn[1].position + new Vector3(a, b, 0), Quaternion.identity);
-        //        numGrass++;
-        //    }
-        //    else
-        //        break;
-        //}
-        //for (int i = 0; i < maxGrass / 4; i++)
-        //{
-        //    if (numGrass < maxGrass)
-        //    {
-        //        float a = Random.Range(-1, 1f);
-        //        float b = Random.Range(-1, 1f);
-        //        EZ_Pooling.EZ_PoolManager.Spawn(preGrass, lstPosSpawn[2].position + new Vector3(a, b, 0), Quaternion.identity);
-        //        numGrass++;
-        //    }
-        //    else
-        //        break;
-        //}
-        //for (int i = 0; i < maxGrass / 4; i++)
-        //{
-        //    if (numGrass < maxGrass)
-        //    {
-        //        float a = Random.Range(-1, 1f);
-        //        float b = Random.Range(-1, 1f);
-        //        EZ_Pooling.EZ_PoolManager.Spawn(preGrass, lstPosSpawn[3].position + new Vector3(a, b, 0), Quaternion.identity);
-        //        numGrass++;
-        //    }
-        //    else
-        //        break;
-        //}
-        //StartCoroutine(SpawnCutter());
+    public IEnumerator DeSpawnGrass()
+    {
+        for (int i = 0; i < lstGrass.Count; i++)
+        {
+            lstGrass[i].DeActive();
+        }
+        yield return new WaitForSeconds(1f);
     }
 
     public IEnumerator SpawnCutter()
@@ -131,7 +91,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(3f);
         parent.SetActive(true);
 
-        //StartCoroutine(SpawnBoom());
+        StartCoroutine(SpawnBoom());
     }
 
     IEnumerator SpawnBoom()
@@ -156,9 +116,15 @@ public class GameManager : MonoBehaviour
     {
         if (spawnCutter >= 20)
         {
-            spawnCutter = 0;
-            lstCutter[a].gameObject.SetActive(true);
-            a++;
+            spawnCutter = 0;           
+            for (int i = 0; i < lstCutter.Count; i++)
+            {
+                if (!lstCutter[i].isActive)
+                {
+                    lstCutter[i].Active();
+                    break;
+                }                    
+            }
             //Instantiate(preCutter, parent.transform.position, Quaternion.identity,parent.transform);
             //EZ_Pooling.EZ_PoolManager.Spawn(preCutter, parent.transform.position, Quaternion.identity);
         }
@@ -173,9 +139,11 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        //Time.timeScale = 0;
-        stateGame = StateGame.NONE;
-        UIManager.Instance.ShowPanelEndGame("Game Over");
+        if (health <= 1 && stateGame == StateGame.PLAYING)
+        {
+            stateGame = StateGame.NONE;
+            UIManager.Instance.ShowPanelEndGame("Game Over");
+        }        
     }
 }
 

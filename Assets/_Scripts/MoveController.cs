@@ -13,14 +13,21 @@ public class MoveController : MonoBehaviour
     public bool isActive = false;
     float delay;
     float timeDelay;
+    Vector2[] arrDir;
+    int i, j;
+    int ID;
     //public GameObject fire;
     // Use this for initialization
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        this.maxSpeed = Random.Range(1.65f,1.85f);
+        this.maxSpeed = Random.Range(1.7f, 1.85f);
         this.transform.position = Vector3.zero;
-        delay = Random.Range(0.5f, 1f);
+        //delay = Random.Range(0.5f, 1f);
+        i = 12;
+        j = i - 1;
+        arrDir = new Vector2[i];
+        ID = Random.Range(0, i);
         //GameManager.Instance.lstCutter.Add(this);
     }
 
@@ -36,40 +43,37 @@ public class MoveController : MonoBehaviour
             {
                 startPosition = mousePosition;
             }
-            float rot_z = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            float rot_z = Mathf.Atan2(arrDir[ID].y, arrDir[ID].x) * Mathf.Rad2Deg;
             if (this.name != "Parent")
             {
                 transform.rotation = Quaternion.Euler(0f, 0f, rot_z - 90);
-            }           
+            }
             lastPosition = Camera.main.ScreenToViewportPoint(Input.mousePosition);
             direction = (lastPosition - startPosition).normalized;
+            arrDir[0] = direction;
             speed += Time.deltaTime * maxSpeed / 2;
             if (speed >= maxSpeed)
                 speed = maxSpeed;
             if ((lastPosition - startPosition).normalized != Vector3.zero)//Vector3.Distance(startPosition, lastPosition) >= 1.5f)
             {
-                if (timeDelay >= delay)
+                if (dirObj != null && dirObj.activeSelf)
                 {
-                    if (dirObj != null && dirObj.activeSelf)
-                    {
-                        dirObj.transform.position = new Vector3(dirObj.transform.position.x, dirObj.transform.position.y, 0);
-                        dirObj.transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
-                    }
-                    rb.velocity = new Vector2(direction.x * speed, direction.y * speed);
-                    //timeDelay = 0;
+                    dirObj.transform.position = new Vector3(dirObj.transform.position.x, dirObj.transform.position.y, 0);
+                    dirObj.transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
+                }
+                if (this.name != "Parent")
+                {
+                    Move();
                 }
                 else
                 {
-                    timeDelay += Time.deltaTime;
+                    rb.velocity = new Vector2(arrDir[0].x * speed, arrDir[0].y * speed);
                 }
-                
-                //transform.Translate(direction.x * speed * Time.deltaTime, direction.y * speed * Time.deltaTime, transform.position.z * Time.deltaTime);
-                //fire.SetActive(true);
             }
         }
         else
         {
-            timeDelay = 0;
+            //timeDelay = 0;
             speed = 0;
             startPosition = lastPosition = Vector3.zero;
             rb.velocity = Vector2.zero;
@@ -80,11 +84,19 @@ public class MoveController : MonoBehaviour
             //fire.SetActive(false);
         }
 
-        //if (this.name != "Parent")
-        //{
-        //    this.transform.position = Vector3.zero;
-        //}
+        while (j > 0)
+        {
+            arrDir[j] = arrDir[j - 1];
+            j--;
+        }
+        j = i - 1;
     }
+
+    void Move()
+    {
+        rb.velocity = new Vector2(arrDir[ID].x * speed, arrDir[ID].y * speed);
+    }
+
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Grass")
@@ -100,7 +112,7 @@ public class MoveController : MonoBehaviour
             if (isActive)
             {
                 DeActive();
-            }               
+            }
             //GameManager.Instance.GameOver();
             //UIManager.Instance.ShowPanelEndGame("Game Over");
         }

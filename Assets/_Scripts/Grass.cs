@@ -37,18 +37,24 @@ public class Grass : MonoBehaviour
     void ON_START_GAME()
     {
         box.isTrigger = false;
-        GameManager.Instance.lstGrass.Add(this);
+        //GameManager.Instance.lstGrass.Add(this);
+        this.RegisterListener(EventID.GAME_OVER, (param) => ON_OVER());
         Invoke("LocLock", 2f);
+    }
+
+    void ON_OVER()
+    {
+        DeActive();
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Cutter")
-        {            
+        {
             if (isActive)
             {
                 isActive = false;
-                GameManager.Instance.numGrass--;               
+                GameManager.Instance.numGrass--;
                 DeActive();
             }
         }
@@ -59,14 +65,6 @@ public class Grass : MonoBehaviour
         EZ_Pooling.EZ_PoolManager.Despawn(this.transform);
     }
 
-    //void OnCollisionEnter2D(Collision2D collision) {
-    //    if (collision.gameObject.tag == "Cutter")
-    //    {
-    //        EZ_Pooling.EZ_PoolManager.Despawn(this.transform);
-    //        GameManager.Instance.numGrass--;
-    //    }
-    //}
-
     void LocLock()
     {
         //rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
@@ -74,9 +72,9 @@ public class Grass : MonoBehaviour
         this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, Random.Range(0f, 1f));
     }
 
-    public void Refresh()
-    {
-        box.isTrigger = false;
-        transform.localScale = new Vector3(maxSize / 20, maxSize / 20, 1);
-    }
+    //    public void Refresh()
+    //    {
+    //        box.isTrigger = false;
+    //        transform.localScale = new Vector3(maxSize / 20, maxSize / 20, 1);
+    //    }
 }

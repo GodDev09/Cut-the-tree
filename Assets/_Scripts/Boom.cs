@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EventDispatcher;
 
 public class Boom : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class Boom : MonoBehaviour
     {
         GameManager.Instance.lstBoom.Add(this);
         speed = Random.Range(1.5f, GameConfig.Instance.MaxSpeedBoom);
+        this.RegisterListener(EventID.GAME_OVER, (param) => ON_OVER());
         NextPoint();
     }
 
@@ -32,6 +34,12 @@ public class Boom : MonoBehaviour
             }
         }
     }
+
+    void ON_OVER()
+    {
+        Refresh();
+    }
+
     void Move()
     {
         if (Vector3.Distance(transform.position, target) >= 0.5f)

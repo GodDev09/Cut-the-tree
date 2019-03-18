@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     public GameObject preCutter;
     public Transform[] lstPosSpawn;
     public List<Boom> lstBoom = new List<Boom>();
-    public List<Grass> lstGrass = new List<Grass>();
+    //public List<Grass> lstGrass = new List<Grass>();
     public List<MoveController> lstCutter = new List<MoveController>();
     public int spawnCutter;
     public int health = 0;
@@ -77,14 +77,14 @@ public class GameManager : MonoBehaviour
         }        
     }
 
-    public IEnumerator DeSpawnGrass()
-    {
-        for (int i = 0; i < lstGrass.Count; i++)
-        {
-            lstGrass[i].DeActive();
-        }
-        yield return new WaitForSeconds(1f);
-    }
+    //public IEnumerator DeSpawnGrass()
+    //{
+    //    for (int i = 0; i < lstGrass.Count; i++)
+    //    {
+    //        lstGrass[i].DeActive();
+    //    }
+    //    yield return new WaitForEndOfFrame();
+    //}
 
     public IEnumerator SpawnCutter()
     {
@@ -123,7 +123,7 @@ public class GameManager : MonoBehaviour
                 {
                     lstCutter[i].Active();
                     break;
-                }                    
+                }
             }
             //Instantiate(preCutter, parent.transform.position, Quaternion.identity,parent.transform);
             //EZ_Pooling.EZ_PoolManager.Spawn(preCutter, parent.transform.position, Quaternion.identity);
@@ -139,7 +139,8 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        if (health <= 1 && stateGame == StateGame.PLAYING)
+        health--;
+        if (health <= 0 && stateGame == StateGame.PLAYING)
         {
             stateGame = StateGame.NONE;
             UIManager.Instance.ShowPanelEndGame("Game Over");

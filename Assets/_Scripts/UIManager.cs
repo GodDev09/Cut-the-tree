@@ -95,26 +95,40 @@ public class UIManager : MonoBehaviour
         AudioManager.Instance.Play("Click");
         Time.timeScale = 1;
         panelEndGame.transform.localScale = new Vector3(0, 0, 0);
-        
+
         ScenesManager.Instance.GoToScene(ScenesManager.TypeScene.Main, () =>
         {
-            for (int i = 0; i < GameManager.Instance.lstBoom.Count; i++)
-            {
-                GameManager.Instance.lstBoom[i].Refresh();
-            }
+            //for (int i = 0; i < GameManager.Instance.lstBoom.Count; i++)
+            //{
+            //    GameManager.Instance.lstBoom[i].Refresh();
+            //}
+            this.PostEvent(EventID.GAME_OVER);
             GameManager.Instance.parent.transform.position = Vector3.zero;
-            GameManager.Instance.lstCutter[0].transform.position = Vector3.zero;
+            GameManager.Instance.lstCutter[0].transform.localPosition = Vector3.zero;
             for (int i = 1; i < GameManager.Instance.lstCutter.Count; i++)
             {
                 GameManager.Instance.lstCutter[i].DeActive();
             }
+            GameManager.Instance.lstCutter[0].Active();
             GameManager.Instance.health = 0;
-            StartCoroutine(GameManager.Instance.DeSpawnGrass());
-            StartCoroutine(GameManager.Instance.Generate());
-            StartCoroutine(GameManager.Instance.SpawnCutter());
-            this.PostEvent(EventID.START_GAME);
+            GameManager.Instance.spawnCutter = 0;
+            StartCoroutine(TEST());
             
+            //StartCoroutine(GameManager.Instance.DeSpawnGrass());
+            //StartCoroutine(GameManager.Instance.Generate());
+            //StartCoroutine(GameManager.Instance.SpawnCutter());
+            this.PostEvent(EventID.START_GAME);
+
         });
+    }
+
+    IEnumerator TEST()
+    {
+        //StartCoroutine(GameManager.Instance.DeSpawnGrass());
+        yield return new WaitForEndOfFrame();
+        StartCoroutine(GameManager.Instance.Generate());
+        yield return new WaitForEndOfFrame();
+        StartCoroutine(GameManager.Instance.SpawnCutter());
     }
 
     public void ShowPanelEndGame(string _state)

@@ -900,6 +900,11 @@ Prefab:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114421414128621360, guid: fe897f01962da2244a303de5a26f857e,
+        type: 2}
+      propertyPath: isActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fe897f01962da2244a303de5a26f857e, type: 2}
   m_IsPrefabParent: 0
@@ -1180,7 +1185,6 @@ MonoBehaviour:
   - {fileID: 900512910}
   - {fileID: 64025464}
   lstBoom: []
-  lstGrass: []
   lstCutter:
   - {fileID: 630383560}
   - {fileID: 888772582}

@@ -79,9 +79,11 @@ public class MoveController : MonoBehaviour
         }
         else if (other.tag == "Boom")
         {
-            Debug.Log("Over");
             //GameManager.Instance.lstCutter.Remove(this);
-            DeActive();
+            if (isActive)
+            {
+                DeActive();
+            }               
             //GameManager.Instance.GameOver();
             //UIManager.Instance.ShowPanelEndGame("Game Over");
         }
@@ -100,8 +102,8 @@ public class MoveController : MonoBehaviour
     public void DeActive()
     {
         isActive = false;
-        GameManager.Instance.health--;
         this.transform.position = Vector3.zero;
+        this.transform.localPosition = Vector3.zero;
         this.GetComponent<SpriteRenderer>().enabled = false;
         this.GetComponent<CircleCollider2D>().enabled = false;
         dirObj.SetActive(false);

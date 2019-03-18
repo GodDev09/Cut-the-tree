@@ -5,5 +5,5 @@
     CHANGE_GOLD_COIN,
     UPGRADE_COMPLETE,
     WIN,
-    GAMEOVER,
+    GAME_OVER,
 }

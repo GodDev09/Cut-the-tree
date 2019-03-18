@@ -16,7 +16,7 @@ public class MoveController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        this.maxSpeed = Random.Range(1.7f,1.85f);
+        this.maxSpeed = Random.Range(1.5f,1.85f);
         this.transform.position = Vector3.zero;
         //GameManager.Instance.lstCutter.Add(this);
     }

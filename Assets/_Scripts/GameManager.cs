@@ -91,7 +91,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(3f);
         parent.SetActive(true);
 
-        StartCoroutine(SpawnBoom());
+        //StartCoroutine(SpawnBoom());
     }
 
     IEnumerator SpawnBoom()
@@ -116,7 +116,7 @@ public class GameManager : MonoBehaviour
     {
         if (spawnCutter >= 20)
         {
-            spawnCutter = 0;           
+            spawnCutter = 0;
             for (int i = 0; i < lstCutter.Count; i++)
             {
                 if (!lstCutter[i].isActive)

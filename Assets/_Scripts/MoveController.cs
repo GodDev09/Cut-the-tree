@@ -34,7 +34,10 @@ public class MoveController : MonoBehaviour
                 startPosition = mousePosition;
             }
             float rot_z = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0f, 0f, rot_z - 90);
+            if (this.name != "Parent")
+            {
+                transform.rotation = Quaternion.Euler(0f, 0f, rot_z - 90);
+            }           
             lastPosition = Camera.main.ScreenToViewportPoint(Input.mousePosition);
             direction = (lastPosition - startPosition).normalized;
             speed += Time.deltaTime * maxSpeed / 2;
@@ -48,6 +51,7 @@ public class MoveController : MonoBehaviour
                     dirObj.transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
                 }
                 rb.velocity = new Vector2(direction.x * speed, direction.y * speed);
+                //transform.Translate(direction.x * speed * Time.deltaTime, direction.y * speed * Time.deltaTime, transform.position.z * Time.deltaTime);
                 //fire.SetActive(true);
             }
         }

@@ -91,7 +91,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(3f);
         parent.SetActive(true);
 
-        //StartCoroutine(SpawnBoom());
+        StartCoroutine(SpawnBoom());
     }
 
     IEnumerator SpawnBoom()
@@ -114,7 +114,7 @@ public class GameManager : MonoBehaviour
 
     void SpawnCutter_EatGrass()
     {
-        if (spawnCutter >= 20)
+        if (spawnCutter >= 30)
         {
             spawnCutter = 0;
             for (int i = 0; i < lstCutter.Count; i++)

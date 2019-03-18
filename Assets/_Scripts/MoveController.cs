@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EventDispatcher;
 
 public class MoveController : MonoBehaviour
 {
@@ -11,85 +12,93 @@ public class MoveController : MonoBehaviour
     float speed = 0;
     public GameObject dirObj;
     public bool isActive = false;
-    float delay;
-    float timeDelay;
     Vector2[] arrDir;
-    int i, j;
-    int ID;
+    int delay, j;
+    public int ID;
     //public GameObject fire;
     // Use this for initialization
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        this.maxSpeed = Random.Range(1.7f, 1.85f);
+        this.RegisterListener(EventID.START_GAME, (param) => ON_START_GAME());
+        GameManager.Instance.lstCutter.Add(this);
+    }
+
+    void ON_START_GAME()
+    {
+        this.maxSpeed = GameConfig.Instance.MaxSpeedCutter;
         this.transform.position = Vector3.zero;
-        //delay = Random.Range(0.5f, 1f);
-        i = 12;
-        j = i - 1;
-        arrDir = new Vector2[i];
-        ID = Random.Range(0, i);
-        //GameManager.Instance.lstCutter.Add(this);
+        delay = GameConfig.Instance.Delay;
+        j = delay - 1;
+        arrDir = new Vector2[delay];
+        ID = Random.Range(0, delay);
+        if (GameManager.Instance.lstCutter.IndexOf(this) == 0)
+        {
+            ID = 0;
+        }
     }
 
     Vector3 startPosition;
     Vector3 lastPosition;
     void FixedUpdate()
     {
-        if (Input.GetMouseButton(0))
+        if (GameManager.Instance.stateGame == StateGame.PLAYING)
         {
-            //mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            mousePosition = Camera.main.ScreenToViewportPoint(Input.mousePosition);
-            if (startPosition == Vector3.zero)
+            if (Input.GetMouseButton(0))
             {
-                startPosition = mousePosition;
-            }
-            float rot_z = Mathf.Atan2(arrDir[ID].y, arrDir[ID].x) * Mathf.Rad2Deg;
-            if (this.name != "Parent")
-            {
-                transform.rotation = Quaternion.Euler(0f, 0f, rot_z - 90);
-            }
-            lastPosition = Camera.main.ScreenToViewportPoint(Input.mousePosition);
-            direction = (lastPosition - startPosition).normalized;
-            arrDir[0] = direction;
-            speed += Time.deltaTime * maxSpeed / 2;
-            if (speed >= maxSpeed)
-                speed = maxSpeed;
-            if ((lastPosition - startPosition).normalized != Vector3.zero)//Vector3.Distance(startPosition, lastPosition) >= 1.5f)
-            {
-                if (dirObj != null && dirObj.activeSelf)
+                //mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                mousePosition = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+                if (startPosition == Vector3.zero)
                 {
-                    dirObj.transform.position = new Vector3(dirObj.transform.position.x, dirObj.transform.position.y, 0);
-                    dirObj.transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
+                    startPosition = mousePosition;
                 }
+                float rot_z = Mathf.Atan2(arrDir[ID].y, arrDir[ID].x) * Mathf.Rad2Deg;
                 if (this.name != "Parent")
                 {
-                    Move();
+                    transform.rotation = Quaternion.Euler(0f, 0f, rot_z - 90);
                 }
-                else
+                lastPosition = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+                direction = (lastPosition - startPosition).normalized;
+                arrDir[0] = direction;
+                speed += Time.deltaTime * maxSpeed / 2;
+                if (speed >= maxSpeed)
+                    speed = maxSpeed;
+                if ((lastPosition - startPosition).normalized != Vector3.zero)//Vector3.Distance(startPosition, lastPosition) >= 1.5f)
                 {
-                    rb.velocity = new Vector2(arrDir[0].x * speed, arrDir[0].y * speed);
+                    if (dirObj != null && dirObj.activeSelf)
+                    {
+                        dirObj.transform.position = new Vector3(dirObj.transform.position.x, dirObj.transform.position.y, 0);
+                        dirObj.transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
+                    }
+                    if (this.name != "Parent")
+                    {
+                        Move();
+                    }
+                    else
+                    {
+                        rb.velocity = new Vector2(arrDir[0].x * speed, arrDir[0].y * speed);
+                    }
                 }
             }
-        }
-        else
-        {
-            //timeDelay = 0;
-            speed = 0;
-            startPosition = lastPosition = Vector3.zero;
-            rb.velocity = Vector2.zero;
-            if (dirObj != null && dirObj.activeSelf)
+            else
             {
-                dirObj.transform.position = new Vector3(dirObj.transform.position.x, dirObj.transform.position.y, -100);
+                speed = 0;
+                startPosition = lastPosition = Vector3.zero;
+                rb.velocity = Vector2.zero;
+                if (dirObj != null && dirObj.activeSelf)
+                {
+                    dirObj.transform.position = new Vector3(dirObj.transform.position.x, dirObj.transform.position.y, -100);
+                }
+                //fire.SetActive(false);
             }
-            //fire.SetActive(false);
-        }
 
-        while (j > 0)
-        {
-            arrDir[j] = arrDir[j - 1];
-            j--;
+            while (j > 0)
+            {
+                arrDir[j] = arrDir[j - 1];
+                j--;
+            }
+            j = delay - 1;
         }
-        j = i - 1;
     }
 
     void Move()
@@ -120,22 +129,29 @@ public class MoveController : MonoBehaviour
 
     public void Active()
     {
-        isActive = true;
-        GameManager.Instance.health++;
-        this.GetComponent<SpriteRenderer>().enabled = true;
-        this.GetComponent<CircleCollider2D>().enabled = true;
-        this.transform.position = new Vector3(this.transform.position.x + 0.01f, this.transform.position.y, this.transform.position.z);
-        dirObj.SetActive(true);
+        if (this.name != "Parent")
+        {
+            isActive = true;
+            GameManager.Instance.health++;
+            this.GetComponent<SpriteRenderer>().enabled = true;
+            this.GetComponent<CircleCollider2D>().enabled = true;
+            this.transform.position = new Vector3(this.transform.position.x + 0.01f, this.transform.position.y, this.transform.position.z);
+            dirObj.SetActive(true);
+        }
     }
 
     public void DeActive()
     {
-        isActive = false;
-        this.transform.position = Vector3.zero;
-        this.transform.localPosition = Vector3.zero;
-        this.GetComponent<SpriteRenderer>().enabled = false;
-        this.GetComponent<CircleCollider2D>().enabled = false;
-        dirObj.SetActive(false);
-        GameManager.Instance.GameOver();
+        if (this.name != "Parent")
+        {
+            isActive = false;
+            this.PostEvent(EventID.CUTTER_DEACTIVE);
+            this.transform.position = Vector3.zero;
+            this.transform.localPosition = Vector3.zero;
+            this.GetComponent<SpriteRenderer>().enabled = false;
+            this.GetComponent<CircleCollider2D>().enabled = false;
+            dirObj.SetActive(false);
+            GameManager.Instance.GameOver();
+        }
     }
 }

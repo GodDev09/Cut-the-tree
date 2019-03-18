@@ -6,4 +6,5 @@
     UPGRADE_COMPLETE,
     WIN,
     GAME_OVER,
+    CUTTER_DEACTIVE
 }

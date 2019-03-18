@@ -37,7 +37,7 @@ public class Boom : MonoBehaviour
 
     void ON_OVER()
     {
-        Refresh();
+        EZ_Pooling.EZ_PoolManager.Despawn(this.transform);
     }
 
     void Move()
@@ -57,8 +57,8 @@ public class Boom : MonoBehaviour
         target = new Vector3(Random.Range(-maxX, maxX), Random.Range(-maxY, maxY), 0);
     }
 
-    public void Refresh()
-    {
-        EZ_Pooling.EZ_PoolManager.Despawn(this.transform);
-    }
+    //public void Refresh()
+    //{
+    //    EZ_Pooling.EZ_PoolManager.Despawn(this.transform);
+    //}
 }

@@ -95,7 +95,6 @@ public class UIManager : MonoBehaviour
         AudioManager.Instance.Play("Click");
         Time.timeScale = 1;
         panelEndGame.transform.localScale = new Vector3(0, 0, 0);
-        StopAllCoroutines();
         ScenesManager.Instance.GoToScene(ScenesManager.TypeScene.Main, () =>
         {
             //for (int i = 0; i < GameManager.Instance.lstBoom.Count; i++)
@@ -114,6 +113,7 @@ public class UIManager : MonoBehaviour
             GameManager.Instance.lstCutter[0].Active();
             GameManager.Instance.health = 0;
             GameManager.Instance.spawnCutter = 0;
+            GameManager.Instance.timeSpawnBoom = 0;
             StartCoroutine(TEST());
             //StartCoroutine(GameManager.Instance.DeSpawnGrass());
             //StartCoroutine(GameManager.Instance.Generate());

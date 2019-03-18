@@ -49,6 +49,8 @@ public class LoadDataJson : MonoBehaviour
             GameConfig.Instance.MaxGrass = objJson["MaxGrass"].AsInt;
             GameConfig.Instance.MaxSpeedCutter = objJson["MaxSpeedCutter"].AsFloat;
             GameConfig.Instance.MaxSpeedBoom = objJson["MaxSpeedBoom"].AsFloat;
+            GameConfig.Instance.Delay = objJson["Delay"].AsInt;
+            GameConfig.Instance.TimeSpawnBoom = objJson["TimeSpawnBoom"].AsFloat;
             //GameConfig.Instance.GoldStart = objJson["GoldStart"].AsLong;
             //GameConfig.Instance.CoinStart = objJson["CoinStart"].AsLong;
             //GameConfig.Instance.ID_UnityAds_ios = objJson["ID_UnityAds_ios"];

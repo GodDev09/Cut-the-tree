@@ -23,6 +23,8 @@ public class GameConfig : MonoBehaviour {
     public int MaxGrass;
     public float MaxSpeedCutter;
     public float MaxSpeedBoom;
+    public float TimeSpawnBoom;
+    public int Delay;
     //public long GoldStart;
     //public long CoinStart;
     //public float TimeAd;

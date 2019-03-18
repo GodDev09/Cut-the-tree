@@ -16,10 +16,11 @@ public class GameManager : MonoBehaviour
     public GameObject preCutter;
     public Transform[] lstPosSpawn;
     public List<Boom> lstBoom = new List<Boom>();
-    //public List<Grass> lstGrass = new List<Grass>();
     public List<MoveController> lstCutter = new List<MoveController>();
     public int spawnCutter;
     public int health = 0;
+    public float timeSpawnBoom;
+    bool isOver;
     void Awake()
     {
         if (Instance != null)
@@ -43,17 +44,52 @@ public class GameManager : MonoBehaviour
             if (numGrass <= 0)
                 Win();
 
-            //if (health <= 0)
-            //    GameOver();
-
             SpawnCutter_EatGrass();
+
+            if (timeSpawnBoom >= GameConfig.Instance.TimeSpawnBoom)
+            {
+                timeSpawnBoom = 0;
+                EZ_Pooling.EZ_PoolManager.Spawn(preBoom, lstPosSpawn[(int)Random.Range(0,lstPosSpawn.Length-1)].position, Quaternion.identity);
+            }
+            else
+            {
+                timeSpawnBoom += Time.deltaTime;
+            }
+
+            //for (int i = 0; i < lstCutter.Count; i++)
+            //{
+            //    isOver = false;
+            //    if(lstCutter[i].isActive)
+            //    {
+            //        isOver = true;
+            //        break;
+            //    }
+            //}
+
+            //if (!isOver)
+            //{
+            //    GameOver();
+            //}
         }
     }
 
     void ON_START_GAME()
     {
+        this.RegisterListener(EventID.CUTTER_DEACTIVE, (param) => ON_CUTTER_DEACTIVE());
         stateGame = StateGame.PLAYING;
         StartCoroutine(Generate());
+    }
+
+    void ON_CUTTER_DEACTIVE()
+    {
+        for (int i = 0; i < lstCutter.Count; i++)
+        {
+            if(lstCutter[i].isActive)
+            {
+                lstCutter[i].ID = 0;
+                break;
+            }
+        }
     }
 
     public IEnumerator Generate()
@@ -93,12 +129,12 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(3f);
         parent.SetActive(true);
 
-        //StartCoroutine(SpawnBoom());
+        StartCoroutine(SpawnBoom());
     }
 
     IEnumerator SpawnBoom()
     {
-        for (int i = 0; i < Random.Range(2, 5); i++)
+        for (int i = 0; i < Random.Range(2, 4); i++)
         {
             Vector3 pos;
             if (i >= lstPosSpawn.Length)
@@ -136,6 +172,7 @@ public class GameManager : MonoBehaviour
     {
         //Time.timeScale = 0;
         stateGame = StateGame.NONE;
+        this.PostEvent(EventID.GAME_OVER);
         UIManager.Instance.ShowPanelEndGame("Win");
     }
 

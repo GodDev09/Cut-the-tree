@@ -1,10 +1,12 @@
 {
   "GoldStart" : 120,
   "CoinStart" : 10,
-  "MaxSpeedCutter" : 2,
+  "MaxSpeedCutter" : 3,
   "MaxSpeedBoom" : 3,
   "MinGrass" : 200,
   "MaxGrass" : 400,
+  "Delay" : 12,
+  "TimeSpawnBoom" : 60,
   "ID_UnityAds_ios" : "",
   "ID_Inter_android" : "",
   "ID_Inter_ios" : "",

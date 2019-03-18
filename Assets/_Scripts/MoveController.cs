@@ -11,13 +11,16 @@ public class MoveController : MonoBehaviour
     float speed = 0;
     public GameObject dirObj;
     public bool isActive = false;
+    float delay;
+    float timeDelay;
     //public GameObject fire;
     // Use this for initialization
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        this.maxSpeed = Random.Range(1.5f,1.85f);
+        this.maxSpeed = Random.Range(1.65f,1.85f);
         this.transform.position = Vector3.zero;
+        delay = Random.Range(0.5f, 1f);
         //GameManager.Instance.lstCutter.Add(this);
     }
 
@@ -45,18 +48,28 @@ public class MoveController : MonoBehaviour
                 speed = maxSpeed;
             if ((lastPosition - startPosition).normalized != Vector3.zero)//Vector3.Distance(startPosition, lastPosition) >= 1.5f)
             {
-                if (dirObj != null && dirObj.activeSelf)
+                if (timeDelay >= delay)
                 {
-                    dirObj.transform.position = new Vector3(dirObj.transform.position.x, dirObj.transform.position.y, 0);
-                    dirObj.transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
+                    if (dirObj != null && dirObj.activeSelf)
+                    {
+                        dirObj.transform.position = new Vector3(dirObj.transform.position.x, dirObj.transform.position.y, 0);
+                        dirObj.transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
+                    }
+                    rb.velocity = new Vector2(direction.x * speed, direction.y * speed);
+                    //timeDelay = 0;
                 }
-                rb.velocity = new Vector2(direction.x * speed, direction.y * speed);
+                else
+                {
+                    timeDelay += Time.deltaTime;
+                }
+                
                 //transform.Translate(direction.x * speed * Time.deltaTime, direction.y * speed * Time.deltaTime, transform.position.z * Time.deltaTime);
                 //fire.SetActive(true);
             }
         }
         else
         {
+            timeDelay = 0;
             speed = 0;
             startPosition = lastPosition = Vector3.zero;
             rb.velocity = Vector2.zero;

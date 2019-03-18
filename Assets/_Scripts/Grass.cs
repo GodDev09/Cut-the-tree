@@ -11,6 +11,7 @@ public class Grass : MonoBehaviour
     void OnSpawned()
     {
         this.RegisterListener(EventID.START_GAME, (param) => ON_START_GAME());
+        this.RegisterListener(EventID.GAME_OVER, (param) => ON_OVER());
         isActive = true;
         box = GetComponent<CircleCollider2D>();
         transform.localScale = new Vector3(maxSize / 20, maxSize / 20, 1);
@@ -38,7 +39,7 @@ public class Grass : MonoBehaviour
     {
         box.isTrigger = false;
         //GameManager.Instance.lstGrass.Add(this);
-        this.RegisterListener(EventID.GAME_OVER, (param) => ON_OVER());
+        
         Invoke("LocLock", 2f);
     }
 

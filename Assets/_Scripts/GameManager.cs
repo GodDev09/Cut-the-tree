@@ -64,17 +64,19 @@ public class GameManager : MonoBehaviour
         yield return new WaitForEndOfFrame();
         for (int i = 0; i < maxGrass / lstPosSpawn.Length; i++)
         {
-            if (numGrass < maxGrass)
+
+            for (int j = 0; j < lstPosSpawn.Length; j++)
             {
-                for (int j = 0; j < lstPosSpawn.Length; j++)
+                if (numGrass < maxGrass)
                 {
                     EZ_Pooling.EZ_PoolManager.Spawn(preGrass, lstPosSpawn[j].position + new Vector3(Random.Range(-1, 1f), Random.Range(-1, 1f), 0), Quaternion.identity);
                     numGrass++;
                 }
+                else
+                    break;
             }
-            else
-                break;
-        }        
+
+        }
     }
 
     //public IEnumerator DeSpawnGrass()
@@ -142,9 +144,11 @@ public class GameManager : MonoBehaviour
         health--;
         if (health <= 0 && stateGame == StateGame.PLAYING)
         {
+            health = 0;
             stateGame = StateGame.NONE;
+            this.PostEvent(EventID.GAME_OVER);
             UIManager.Instance.ShowPanelEndGame("Game Over");
-        }        
+        }
     }
 }
 

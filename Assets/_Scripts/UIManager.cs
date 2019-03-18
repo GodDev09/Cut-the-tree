@@ -95,14 +95,16 @@ public class UIManager : MonoBehaviour
         AudioManager.Instance.Play("Click");
         Time.timeScale = 1;
         panelEndGame.transform.localScale = new Vector3(0, 0, 0);
-
+        StopAllCoroutines();
         ScenesManager.Instance.GoToScene(ScenesManager.TypeScene.Main, () =>
         {
             //for (int i = 0; i < GameManager.Instance.lstBoom.Count; i++)
             //{
             //    GameManager.Instance.lstBoom[i].Refresh();
-            //}
-            this.PostEvent(EventID.GAME_OVER);
+            //}         
+            GameManager.Instance.maxGrass = GameConfig.Instance.MaxGrass;
+            GameManager.Instance.minGrass = GameConfig.Instance.MinGrass;
+            GameManager.Instance.numGrass = 0;
             GameManager.Instance.parent.transform.position = Vector3.zero;
             GameManager.Instance.lstCutter[0].transform.localPosition = Vector3.zero;
             for (int i = 1; i < GameManager.Instance.lstCutter.Count; i++)
@@ -113,7 +115,6 @@ public class UIManager : MonoBehaviour
             GameManager.Instance.health = 0;
             GameManager.Instance.spawnCutter = 0;
             StartCoroutine(TEST());
-            
             //StartCoroutine(GameManager.Instance.DeSpawnGrass());
             //StartCoroutine(GameManager.Instance.Generate());
             //StartCoroutine(GameManager.Instance.SpawnCutter());
@@ -127,8 +128,10 @@ public class UIManager : MonoBehaviour
         //StartCoroutine(GameManager.Instance.DeSpawnGrass());
         yield return new WaitForEndOfFrame();
         StartCoroutine(GameManager.Instance.Generate());
+        //Debug.Log("12");
         yield return new WaitForEndOfFrame();
         StartCoroutine(GameManager.Instance.SpawnCutter());
+        //Debug.Log("13");
     }
 
     public void ShowPanelEndGame(string _state)

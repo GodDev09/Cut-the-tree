@@ -1,7 +1,7 @@
 {
   "GoldStart" : 120,
   "CoinStart" : 10,
-  "MaxSpeedCutter" : 5,
+  "MaxSpeedCutter" : 3,
   "MaxSpeedBoom" : 3,
   "MinGrass" : 400,
   "MaxGrass" : 500,

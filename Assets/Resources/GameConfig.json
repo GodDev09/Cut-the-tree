@@ -6,7 +6,7 @@
   "MinGrass" : 200,
   "MaxGrass" : 400,
   "Delay" : 12,
-  "TimeSpawnBoom" : 60,
+  "TimeSpawnBoom" : 20,
   "ID_UnityAds_ios" : "",
   "ID_Inter_android" : "",
   "ID_Inter_ios" : "",

@@ -115,12 +115,13 @@ public class MoveController : MonoBehaviour
             GameManager.Instance.spawnCutter++;
             AudioManager.Instance.PlaySaw();
         }
-        else if (other.tag == "Boom")
+        else if (other.tag == "Boom" || other.tag == "Map")
         {
             //GameManager.Instance.lstCutter.Remove(this);
             if (isActive)
             {
                 DeActive();
+                other.gameObject.GetComponent<Boom>().Refresh();
             }
             //GameManager.Instance.GameOver();
             //UIManager.Instance.ShowPanelEndGame("Game Over");

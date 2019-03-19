@@ -79,12 +79,19 @@ public class MoveController : MonoBehaviour
                         rb.velocity = new Vector2(arrDir[0].x * speed, arrDir[0].y * speed);
                     }
                 }
+                else
+                {
+                    arrDir[0] = Vector2.zero;
+                    rb.velocity = new Vector2(arrDir[ID].x, arrDir[ID].y);
+                }
             }
             else
             {
                 speed = 0;
                 startPosition = lastPosition = Vector3.zero;
-                rb.velocity = Vector2.zero;
+                //rb.velocity = Vector2.zero;
+                arrDir[0] = Vector2.zero;
+                rb.velocity = new Vector2(arrDir[ID].x, arrDir[ID].y);
                 if (dirObj != null && dirObj.activeSelf)
                 {
                     dirObj.transform.position = new Vector3(dirObj.transform.position.x, dirObj.transform.position.y, -100);
@@ -115,7 +122,7 @@ public class MoveController : MonoBehaviour
             GameManager.Instance.spawnCutter++;
             AudioManager.Instance.PlaySaw();
         }
-        else if (other.tag == "Boom" || other.tag == "Map")
+        else if (other.tag == "Boom")
         {
             //GameManager.Instance.lstCutter.Remove(this);
             if (isActive)
@@ -123,8 +130,13 @@ public class MoveController : MonoBehaviour
                 DeActive();
                 other.gameObject.GetComponent<Boom>().Refresh();
             }
-            //GameManager.Instance.GameOver();
-            //UIManager.Instance.ShowPanelEndGame("Game Over");
+        }
+        else if (other.tag == "Map")
+        {
+            if (isActive)
+            {
+                DeActive();
+            }
         }
     }
 

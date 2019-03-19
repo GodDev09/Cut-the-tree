@@ -129,7 +129,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(3f);
         parent.SetActive(true);
 
-        StartCoroutine(SpawnBoom());
+        //StartCoroutine(SpawnBoom());
     }
 
     IEnumerator SpawnBoom()

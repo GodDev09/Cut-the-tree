@@ -12,6 +12,10 @@ public class SmoothFollow2DCamera : MonoBehaviour
     [Tooltip("Multiplier for the movement speed")]
     [Range(0f, 5f)]
     public float smoothSpeed = 0.125f;
+    public float maxX;
+    public float minX;
+    public float maxY;
+    public float minY;
 
     // Use this for initialization
     void Start()
@@ -26,7 +30,7 @@ public class SmoothFollow2DCamera : MonoBehaviour
         //{
             Vector3 position = target.position + offset;
             Vector3 smoothedPosition = Vector3.Lerp(transform.position, position, smoothSpeed);
-            transform.position = new Vector3(Mathf.Clamp(smoothedPosition.x, -3.3f, 3.3f), Mathf.Clamp(smoothedPosition.y, -7.5f, 4f), smoothedPosition.z);
+            transform.position = new Vector3(Mathf.Clamp(smoothedPosition.x, minX, maxX), Mathf.Clamp(smoothedPosition.y, minY, maxY), smoothedPosition.z);
             //transform.LookAt(target);
         //}
     }

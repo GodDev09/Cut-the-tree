@@ -40,7 +40,7 @@ public class Grass : MonoBehaviour
         box.isTrigger = false;
         //GameManager.Instance.lstGrass.Add(this);
         
-        Invoke("LocLock", 2f);
+        Invoke("LocLock", 1.5f);
     }
 
     void ON_OVER()

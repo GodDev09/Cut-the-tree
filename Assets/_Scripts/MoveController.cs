@@ -15,6 +15,7 @@ public class MoveController : MonoBehaviour
     Vector2[] arrDir;
     int delay, j;
     public int ID;
+    float radius;
     //public GameObject fire;
     // Use this for initialization
     void Start()
@@ -108,6 +109,17 @@ public class MoveController : MonoBehaviour
         }
     }
 
+    void LateUpdate()
+    {
+        if (this.name != "Parent")
+        {
+            if (this.transform.localPosition.x >= 0.35f || this.transform.localPosition.y >= 0.35f || this.transform.localPosition.x <= -0.35f || this.transform.localPosition.y <= -0.35f)
+            {
+                rb.AddForce((Vector3.zero - this.transform.localPosition) * maxSpeed * 10);
+            }
+        }
+    }
+
     void Move()
     {
         rb.velocity = new Vector2(arrDir[ID].x * speed, arrDir[ID].y * speed);
@@ -132,6 +144,17 @@ public class MoveController : MonoBehaviour
             }
         }
         else if (other.tag == "Map")
+        {
+            if (isActive)
+            {
+                DeActive();
+            }
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.tag == "Map")
         {
             if (isActive)
             {
